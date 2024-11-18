@@ -1,0 +1,11 @@
+services:
+  tivit_test_api:
+    build: .
+    container_name: tivit_test_api
+    environment:
+      API_ENV: testing
+    command: ["poetry", "run", "uvicorn", "main:get_app", "--host", "0.0.0.0", "--port", "8081", "--reload", "--log-level", "debug"]
+    volumes:
+      - .:/app
+    ports:
+      - "8081:8081"
