@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Response, status
 
+from app.decorators.decorators import check_external_service_health
 from app.schemas.token import TokenCredentials
 from app.services.tivit_fake_service import TivitFakeService
 
@@ -15,6 +16,7 @@ tag = "Token"
     summary="Retrieve token to use for endpoints.",
     description="This endpoint retrieve token to use for endpoints."
 )
+@check_external_service_health()
 async def get_token(token_credentials: TokenCredentials, response: Response):
     """
     Retrieve token to use for endpoints.

@@ -37,6 +37,9 @@ Project structure (considering folder start in `tivit-test-api`):
 │   │   ├── constants
 │   │   │    ├── __init__.py 
 │   │   │    ├── constants.py
+│   │   ├── decorators
+│   │   │    ├── __init__.py 
+│   │   │    ├── decorators.py
 │   │   ├── repositories
 │   │   │    ├── __init__.py 
 │   │   │    ├── fake_user_repository.py

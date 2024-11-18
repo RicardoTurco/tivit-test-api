@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Response, status
 
+from app.decorators.decorators import check_external_service_health
 from app.services.tivit_fake_service import TivitFakeService
 
 
@@ -14,6 +15,7 @@ tag = "User"
     summary="Retrieve user data",
     description="This endpoint retrieve user data."
 )
+@check_external_service_health()
 async def get_user_data(username: str, response: Response):
     """
     Retrieve user data.

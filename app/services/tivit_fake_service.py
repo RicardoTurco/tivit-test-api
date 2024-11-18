@@ -39,11 +39,6 @@ class TivitFakeService:
         :param credentials: Credentials pass in request body
         :return: access_token of a user
         """
-        external_health_check = await TivitFakeService.health_check()
-        if not external_health_check:
-            raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-                                detail="External application is not ok")
-
         params = {
             "username": credentials.username,
             "password": credentials.password
@@ -108,13 +103,7 @@ class TivitFakeService:
         :return: data of admin
         """
         try:
-            external_health_check = await TivitFakeService.health_check()
-            if not external_health_check:
-                raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-                                    detail="External application is not ok")
-
             admin_data_external = await TivitFakeService.admin_data_external(username)
-
             return admin_data_external
         except HTTPException as e:
             raise HTTPException(status_code=e.status_code,
@@ -160,13 +149,7 @@ class TivitFakeService:
         :return: data of user
         """
         try:
-            external_health_check = await TivitFakeService.health_check()
-            if not external_health_check:
-                raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-                                    detail="External application is not ok")
-
             user_data_external = await TivitFakeService.user_data_external(username)
-
             return user_data_external
         except HTTPException as e:
             raise HTTPException(status_code=e.status_code,
