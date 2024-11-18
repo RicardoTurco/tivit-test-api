@@ -8,7 +8,12 @@ admin_router = APIRouter()
 tag = "Admin"
 
 
-@admin_router.get("/admin", tags=[tag], summary="Retrieve admin data")
+@admin_router.get(
+    "/admin",
+    tags=[tag],
+    summary="Retrieve admin data",
+    description="This endpoint retrieve admin data"
+)
 async def get_admin_data(username: str, response: Response):
     """
     Retrieve admin data.

@@ -8,7 +8,12 @@ health_router = APIRouter()
 tag = "Health Check"
 
 
-@health_router.get("/external-health-check", tags=[tag], summary="Check status of external application")
+@health_router.get(
+    "/external-health-check",
+    tags=[tag],
+    summary="Check status of external application",
+    description="This endpoint returns a health check of external application."
+)
 async def external_health_check(response: Response):
     """
     This endpoint returns a health check of external application.
@@ -19,7 +24,12 @@ async def external_health_check(response: Response):
     return {"external_application": result}
 
 
-@health_router.get("/health-check", tags=[tag], summary="Check status of application")
+@health_router.get(
+    "/health-check",
+    tags=[tag],
+    summary="Check status of application",
+    description="This endpoint returns a health check of application."
+)
 async def health_check(response: Response):
     """
     This endpoint returns a health check of application.

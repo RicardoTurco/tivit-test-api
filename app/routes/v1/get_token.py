@@ -9,7 +9,12 @@ token_router = APIRouter()
 tag = "Token"
 
 
-@token_router.post("/get-token", tags=[tag], summary="Retrieve token to use")
+@token_router.post(
+    "/get-token",
+    tags=[tag],
+    summary="Retrieve token to use for endpoints.",
+    description="This endpoint retrieve token to use for endpoints."
+)
 async def get_token(token_credentials: TokenCredentials, response: Response):
     """
     Retrieve token to use for endpoints.

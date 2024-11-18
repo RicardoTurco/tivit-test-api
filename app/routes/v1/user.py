@@ -8,7 +8,12 @@ user_router = APIRouter()
 tag = "User"
 
 
-@user_router.get("/user", tags=[tag], summary="Retrieve user data")
+@user_router.get(
+    "/user",
+    tags=[tag],
+    summary="Retrieve user data",
+    description="This endpoint retrieve user data."
+)
 async def get_user_data(username: str, response: Response):
     """
     Retrieve user data.
