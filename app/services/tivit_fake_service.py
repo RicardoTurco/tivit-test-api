@@ -27,8 +27,9 @@ class TivitFakeService:
 
             return result
 
-        except requests.RequestException as e:
-            raise HTTPException(status_code=500, detail=f"Error to verify health check of external application {e}")
+        except HTTPException as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                detail=f"Error to verify health check of external application {e}")
 
     @staticmethod
     async def get_token(credentials: TokenCredentials):
@@ -40,7 +41,8 @@ class TivitFakeService:
         """
         external_health_check = await TivitFakeService.health_check()
         if not external_health_check:
-            raise HTTPException(status_code=500, detail="External application is not ok")
+            raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                                detail="External application is not ok")
 
         params = {
             "username": credentials.username,
@@ -57,15 +59,23 @@ class TivitFakeService:
             token_data = response.json()
 
             if "access_token" not in token_data:
-                raise HTTPException(status_code=500, detail="Token not found in response")
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                                    detail="Token not found in response")
 
             return {"access_token": token_data.get("access_token"), "token_type": token_data.get("token_type")}
 
-        except requests.RequestException as e:
-            raise HTTPException(status_code=500, detail=f"Error to obtain token: {e}")
+        except HTTPException as e:
+            raise HTTPException(status_code=e.status_code,
+                                detail=f"Error to obtain token: {e.detail}")
 
     @staticmethod
     async def admin_data_external(username: str) -> dict:
+        """
+        Retrieve admin data from api external
+
+        :param username: name of admin
+        :return: data of admin
+        """
         fake_user_db = FakeUserDb()
 
         user_db = await fake_user_db.get_fake_user_by_name(username)
@@ -92,10 +102,10 @@ class TivitFakeService:
     @staticmethod
     async def get_data_admin(username: str) -> dict:
         """
-        Retrieve admin data from external api
+        Calls external api to retrieve admin data.
 
         :param username: name of admin
-        :return: information of admin
+        :return: data of admin
         """
         try:
             external_health_check = await TivitFakeService.health_check()
