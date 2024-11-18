@@ -11,6 +11,13 @@ tag = "Token"
 
 @token_router.post("/get-token", tags=[tag], summary="Retrieve token to use")
 async def get_token(token_credentials: TokenCredentials, response: Response):
+    """
+    Retrieve token to use for endpoints.
+
+    :param token_credentials: credentials for user to retrieve token
+    :param response: status code of request
+    :return: token and type of token
+    """
     tivit_fake_service = TivitFakeService()
     token_data = await tivit_fake_service.get_token(token_credentials)
     response.status_code = status.HTTP_200_OK
