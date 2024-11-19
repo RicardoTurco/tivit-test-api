@@ -54,17 +54,22 @@ d) Install dependencies:
 poetry install
 
 
-e) To run / up application:
+e) Run ALL tests of application:
+
+pytest -v
+
+
+f) To run / up application:
 
 poetry run python main.py
 
 
-f) Access documentation/swagger of application:
+g) Access documentation/swagger of application:
 
 http://0.0.0.0:8081/docs (on your browser)
 
 
-g) To stop / down application:
+h) To stop / down application:
 
 CTRL + C
 ```
