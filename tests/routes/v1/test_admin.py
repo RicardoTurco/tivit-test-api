@@ -1,6 +1,6 @@
 import pytest
 from fastapi import HTTPException, status
-from unittest.mock import AsyncMock, Mock, patch
+from unittest.mock import AsyncMock, patch
 
 from app.services.tivit_fake_service import TivitFakeService
 
@@ -31,11 +31,13 @@ async def test_get_admin_data_success(client):
         }
     }
 
-    with patch("app.services.tivit_fake_service.TivitFakeService.get_data_admin", new_callable=AsyncMock) as mock_get_data_admin:
+    with patch("app.services.tivit_fake_service.TivitFakeService.get_data_admin",
+               new_callable=AsyncMock) as mock_get_data_admin:
+
         mock_get_data_admin.return_value = mock_admin_data
         response = client.get(f"/v1/admin?username={mock_username}")
 
-        assert response.status_code == 200
+        assert response.status_code == status.HTTP_200_OK
         assert response.json() == {"admin_data": mock_admin_data}
 
         mock_get_data_admin.assert_called_once_with(mock_username)
@@ -46,8 +48,11 @@ async def test_admin_data_external_user_not_found():
     # When endpoint '/v1/admin?username=<admin>' is called,
     # internally call 'admin_data_external' method passing 'username' as a parameter.
     # Here the method is called with a user unknown (not found).
-    with patch("app.repositories.fake_user_repository.FakeUserDb.get_fake_user_by_name", new_callable=AsyncMock) as mock_get_user:
+    with patch("app.repositories.fake_user_repository.FakeUserDb.get_fake_user_by_name",
+               new_callable=AsyncMock) as mock_get_user:
+
         mock_get_user.return_value = None
+
         with pytest.raises(HTTPException) as exc_info:
             await TivitFakeService.admin_data_external("unknown_user")
 
@@ -70,6 +75,7 @@ async def test_admin_data_external_user_not_authorized():
 
     with patch("app.repositories.fake_user_repository.FakeUserDb.get_fake_user_by_name",
                new_callable=AsyncMock) as mock_get_user:
+
         mock_get_user.return_value = mock_user_non_admin
 
         with pytest.raises(HTTPException) as exc_info:
