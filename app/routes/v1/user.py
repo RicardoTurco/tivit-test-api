@@ -3,7 +3,6 @@ from fastapi import APIRouter, Response, status
 from app.decorators.decorators import check_external_service_health
 from app.services.tivit_fake_service import TivitFakeService
 
-
 user_router = APIRouter()
 
 tag = "User"

@@ -1,6 +1,7 @@
+from unittest.mock import AsyncMock, patch
+
 import pytest
 from fastapi import status
-from unittest.mock import AsyncMock, patch
 
 from app.schemas.token import TokenCredentials
 

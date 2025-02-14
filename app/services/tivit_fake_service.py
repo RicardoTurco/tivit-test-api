@@ -1,11 +1,10 @@
 import requests
-
 from fastapi import HTTPException, status
 
 from app.constants.constants import (
+    URL_TIVIT_ADMIN,
     URL_TIVIT_HEALTH,
     URL_TIVIT_TOKEN,
-    URL_TIVIT_ADMIN,
     URL_TIVIT_USER,
 )
 from app.repositories.fake_user_repository import FakeUserDb

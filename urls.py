@@ -1,7 +1,6 @@
 from fastapi.routing import APIRouter
 
-from app.routes.v1 import health_check, get_token, admin, user
-
+from app.routes.v1 import admin, get_token, health_check, user
 
 router_v1 = APIRouter(prefix="/v1")
 

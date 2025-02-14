@@ -2,7 +2,6 @@ from fastapi import APIRouter, Response, status
 
 from app.services.tivit_fake_service import TivitFakeService
 
-
 health_router = APIRouter()
 
 tag = "Health Check"

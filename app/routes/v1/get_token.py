@@ -4,7 +4,6 @@ from app.decorators.decorators import check_external_service_health
 from app.schemas.token import TokenCredentials
 from app.services.tivit_fake_service import TivitFakeService
 
-
 token_router = APIRouter()
 
 tag = "Token"

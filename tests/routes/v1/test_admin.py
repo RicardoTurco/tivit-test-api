@@ -1,6 +1,7 @@
+from unittest.mock import AsyncMock, patch
+
 import pytest
 from fastapi import HTTPException, status
-from unittest.mock import AsyncMock, patch
 
 from app.services.tivit_fake_service import TivitFakeService
 

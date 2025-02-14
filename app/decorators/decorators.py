@@ -1,5 +1,6 @@
-from fastapi import HTTPException, status
 from functools import wraps
+
+from fastapi import HTTPException, status
 
 from app.services.tivit_fake_service import TivitFakeService
 
