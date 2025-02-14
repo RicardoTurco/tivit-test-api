@@ -14,7 +14,7 @@ tag = "Token"
     "/get-token",
     tags=[tag],
     summary="Retrieve token to use for endpoints.",
-    description="This endpoint retrieve token to use for endpoints."
+    description="This endpoint retrieve token to use for endpoints.",
 )
 @check_external_service_health()
 async def get_token(token_credentials: TokenCredentials, response: Response):
@@ -28,4 +28,7 @@ async def get_token(token_credentials: TokenCredentials, response: Response):
     tivit_fake_service = TivitFakeService()
     token_data = await tivit_fake_service.get_token(token_credentials)
     response.status_code = status.HTTP_200_OK
-    return {"access_token": token_data.get("access_token"), "token_type": token_data.get("token_type")}
+    return {
+        "access_token": token_data.get("access_token"),
+        "token_type": token_data.get("token_type"),
+    }

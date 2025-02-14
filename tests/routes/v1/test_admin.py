@@ -16,23 +16,17 @@ async def test_get_admin_data_success(client):
                 "name": "Admin Master",
                 "email": "admin@example.com",
                 "reports": [
-                    {
-                        "id": 1,
-                        "title": "Monthly Sales",
-                        "status": "Completed"
-                    },
-                    {
-                        "id": 2,
-                        "title": "User Activity",
-                        "status": "Pending"
-                    }
-                ]
-            }
+                    {"id": 1, "title": "Monthly Sales", "status": "Completed"},
+                    {"id": 2, "title": "User Activity", "status": "Pending"},
+                ],
+            },
         }
     }
 
-    with patch("app.services.tivit_fake_service.TivitFakeService.get_data_admin",
-               new_callable=AsyncMock) as mock_get_data_admin:
+    with patch(
+        "app.services.tivit_fake_service.TivitFakeService.get_data_admin",
+        new_callable=AsyncMock,
+    ) as mock_get_data_admin:
 
         mock_get_data_admin.return_value = mock_admin_data
         response = client.get(f"/v1/admin?username={mock_username}")
@@ -48,8 +42,10 @@ async def test_admin_data_external_user_not_found():
     # When endpoint '/v1/admin?username=<admin>' is called,
     # internally call 'admin_data_external' method passing 'username' as a parameter.
     # Here the method is called with a user unknown (not found).
-    with patch("app.repositories.fake_user_repository.FakeUserDb.get_fake_user_by_name",
-               new_callable=AsyncMock) as mock_get_user:
+    with patch(
+        "app.repositories.fake_user_repository.FakeUserDb.get_fake_user_by_name",
+        new_callable=AsyncMock,
+    ) as mock_get_user:
 
         mock_get_user.return_value = None
 
@@ -70,11 +66,13 @@ async def test_admin_data_external_user_not_authorized():
     mock_user_non_admin = {
         "username": "non_admin_user",
         "password": "password123",
-        "role": "user"
+        "role": "user",
     }
 
-    with patch("app.repositories.fake_user_repository.FakeUserDb.get_fake_user_by_name",
-               new_callable=AsyncMock) as mock_get_user:
+    with patch(
+        "app.repositories.fake_user_repository.FakeUserDb.get_fake_user_by_name",
+        new_callable=AsyncMock,
+    ) as mock_get_user:
 
         mock_get_user.return_value = mock_user_non_admin
 

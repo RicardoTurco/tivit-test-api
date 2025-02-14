@@ -12,7 +12,7 @@ tag = "Health Check"
     "/external-health-check",
     tags=[tag],
     summary="Check status of external application",
-    description="This endpoint returns a health check of external application."
+    description="This endpoint returns a health check of external application.",
 )
 async def external_health_check(response: Response):
     """
@@ -28,7 +28,7 @@ async def external_health_check(response: Response):
     "/health-check",
     tags=[tag],
     summary="Check status of application",
-    description="This endpoint returns a health check of application."
+    description="This endpoint returns a health check of application.",
 )
 async def health_check(response: Response):
     """

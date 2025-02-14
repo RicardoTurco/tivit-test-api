@@ -13,7 +13,7 @@ tag = "Admin"
     "/admin",
     tags=[tag],
     summary="Retrieve admin data",
-    description="This endpoint retrieve admin data"
+    description="This endpoint retrieve admin data",
 )
 @check_external_service_health()
 async def get_admin_data(username: str, response: Response):

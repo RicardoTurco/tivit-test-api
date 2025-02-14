@@ -14,10 +14,11 @@ def check_external_service_health():
             if not external_health_check:
                 raise HTTPException(
                     status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-                    detail="External application is not ok"
+                    detail="External application is not ok",
                 )
 
             return await func(*args, **kwargs)
+
         return wrapper
 
     return decorator

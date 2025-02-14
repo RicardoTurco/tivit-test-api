@@ -7,7 +7,7 @@ from urls import router_v1
 def get_app() -> FastAPI:
     app = FastAPI(
         title="Tivit Test API",
-        description="This is a simple test for python developer role"
+        description="This is a simple test for python developer role",
     )
 
     app.add_middleware(
@@ -26,9 +26,4 @@ def get_app() -> FastAPI:
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(
-        app="main:get_app",
-        host="0.0.0.0",
-        port=8000,
-        factory=True
-    )
+    uvicorn.run(app="main:get_app", host="0.0.0.0", port=8000, factory=True)

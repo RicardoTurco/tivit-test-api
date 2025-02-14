@@ -13,7 +13,7 @@ tag = "User"
     "/user",
     tags=[tag],
     summary="Retrieve user data",
-    description="This endpoint retrieve user data."
+    description="This endpoint retrieve user data.",
 )
 @check_external_service_health()
 async def get_user_data(username: str, response: Response):
