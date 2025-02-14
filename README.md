@@ -145,3 +145,23 @@ Project structure (considering folder start in `tivit-test-api`):
 * `pyproject.toml` - Some configurations of project.
 * `README.md` - Instructions and information to run this project locally.
 * `urls.py` - Declare all resource routes of project.
+
+## LINTERS
+
+This project has a some LINTERs to mantain the quality of code.
+
+### Coverage
+
+To check the COVERAGE of tests of project, is possible execute the follow command:
+
+```
+pytest --cov .
+```
+
+To view more details about the COVERAGE, just run the command:
+
+```
+pytest --cov-report html --cov .
+```
+
+This will create a folder 'htmlcov' and one file '.coverage' (they should be included in '.gitignore' file). Inside of folder 'htmlcov', just open the 'index.html' file in your browser to view details about the COVERAGE. 
