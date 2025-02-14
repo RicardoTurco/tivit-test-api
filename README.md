@@ -33,35 +33,41 @@ To run application in development time:
 a) Clone this project in your machine
 
 
-b) Create a virtualenv, using version 3.12 of python:
-
-poetry env use 3.12
+b) IMPORTANT: Set your version of Python to 3.12.0
 
 
-c) Activate virtualenv:
+c) Run setup command:
 
-poetry shell
-(show the complete path of virtualenv)
+- Make setup
 
-obs: 
-If name of virtualenv is not in prompt use the command:
-- source <path_to_virtualenv>/bin/activate
+OBS:
+
+If not create a virtualenv using the correct version of Python, you can create it manually: 
+
+- poetry env use 3.12
+- poetry shell (show the complete path of virtualenv)
+- source <path_to_virtualenv>/bin/activate (If name of virtualenv is not in prompt use the command)
 
 
 d) Install dependencies:
-(the name of virtualenv must be in prompt)
 
-poetry install
+- make install
 
 
 e) Run ALL tests of application:
 
-pytest -v
+- make test
+
+OBS: 
+
+You can also generate the COVERAGE report of tests:
+
+- make test-cov-rep
 
 
 f) To run / up application:
 
-poetry run python main.py
+- make run
 
 
 g) Access documentation/swagger of application:
@@ -155,16 +161,22 @@ This project has a some LINTERs to mantain the quality of code.
 To check the COVERAGE of tests of project, is possible execute the follow command:
 
 ```
-pytest --cov .
+make test-cov
 ```
 
 To view more details about the COVERAGE, just run the command:
 
 ```
-pytest --cov-report html --cov .
+make test-cov-rep
 ```
 
-This will create a folder 'htmlcov' and one file '.coverage' (they should be included in '.gitignore' file). Inside of folder 'htmlcov', just open the 'index.html' file in your browser to view details about the COVERAGE. 
+This will create a folder 'htmlcov' and one file '.coverage' (they should be included in '.gitignore' file). Inside of folder 'htmlcov', just open the 'index.html' file in your browser to view details about the COVERAGE.
+
+To delete the folder and file created, just run command:
+
+```
+make clean
+```
 
 ## Black
 
