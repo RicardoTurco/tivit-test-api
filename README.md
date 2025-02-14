@@ -168,11 +168,22 @@ This will create a folder 'htmlcov' and one file '.coverage' (they should be inc
 
 ## Black
 
-Formats the code according to [PEP-8](https://peps.python.org/pep-0008/) standards
+Formats the code according to [PEP-8](https://peps.python.org/pep-0008/) standards.
 
 ```
 black --check . (displays which files need adjustments in code formatting);
 black --check --diff <path_to_file> (displays the necessary code formmating changes in a SPECIFIC file - manual adjust);
 black . (performs code formatting "automatically" in ALL files);
-black <path_to_arquivo> (performs code formatting "automatically" in a SPECIFIC file);
+black <path_to_file> (performs code formatting "automatically" in a SPECIFIC file);
+```
+
+## Isort
+
+Performs adjustments in "imports" of project - [ISORT](https://pycqa.github.io/isort/).
+
+```
+isort --check . (displays wich files need adjustments in imports);
+isort --check --diff <path_to_file> (displays the necessary adjustments in imports in a SPECIFIC file - manual adjust);
+isort . (performs adjustments in imports "automatically" in ALL files);
+isort <path_to_file> (performs adjustments in imports "automatically" in a SPECIFIC file);
 ```
