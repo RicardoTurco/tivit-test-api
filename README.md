@@ -165,3 +165,14 @@ pytest --cov-report html --cov .
 ```
 
 This will create a folder 'htmlcov' and one file '.coverage' (they should be included in '.gitignore' file). Inside of folder 'htmlcov', just open the 'index.html' file in your browser to view details about the COVERAGE. 
+
+## Black
+
+Formats the code according to [PEP-8](https://peps.python.org/pep-0008/) standards
+
+```
+black --check . (displays which files need adjustments in code formatting);
+black --check --diff <path_to_file> (displays the necessary code formmating changes in a SPECIFIC file - manual adjust);
+black . (performs code formatting "automatically" in ALL files);
+black <path_to_arquivo> (performs code formatting "automatically" in a SPECIFIC file);
+```
