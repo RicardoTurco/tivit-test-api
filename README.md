@@ -126,6 +126,7 @@ Project structure (considering folder start in `tivit-test-api`):
 ├── docker-compose.yaml
 ├── Dockerfile
 ├── main.py
+├── Makefile
 ├── poetry.lock
 ├── pyproject.toml
 ├── README.md
@@ -145,8 +146,9 @@ Project structure (considering folder start in `tivit-test-api`):
 
 * `.gitignore` - Lists files and directories which should not be added to git repository.
 * `docker-compose.yaml` - To UP application locally.
-* `Dockerfile` - Build a image from project.
+* `Dockerfile` - Build an image from project.
 * `main.py` - The Application entrypoint.
+* `Makefile` - Make commands available.
 * `poetry.lock` - Define specific versions of dependencies.
 * `pyproject.toml` - Some configurations of project.
 * `README.md` - Instructions and information to run this project locally.
