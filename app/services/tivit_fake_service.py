@@ -7,8 +7,8 @@ from app.constants.constants import (
     URL_TIVIT_TOKEN,
     URL_TIVIT_USER,
 )
-from app.repositories.fake_user_repository import FakeUserDb
 from app.schemas.token import TokenCredentials
+from app.utils.utils import UserFromDb
 
 
 class TivitFakeService:
@@ -48,9 +48,24 @@ class TivitFakeService:
         :param credentials: Credentials pass in request body
         :return: access_token of a user
         """
-        params = {"username": credentials.username, "password": credentials.password}
-
         try:
+            user_from_db = UserFromDb()
+
+            any_user_db = await user_from_db.find_user_db(
+                username=credentials.username, not_found_msg=credentials.username
+            )
+
+            if credentials.password != any_user_db.get("password"):
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Wrong password",
+                )
+
+            params = {
+                "username": any_user_db.get("username"),
+                "password": any_user_db.get("password"),
+            }
+
             response = requests.post(URL_TIVIT_TOKEN, params=params, verify=False)
             response.raise_for_status()
             token_data = response.json()
@@ -79,23 +94,18 @@ class TivitFakeService:
         Retrieve data from api external
 
         :param username: name of any user
+        :param not_found_msg: who's to destination msg when user not found
+        :param role: role of user
+        :param url_tivit: url to external tivit service
         :return: data returned
         """
-        fake_user_db = FakeUserDb()
-        any_user_db = await fake_user_db.get_fake_user_by_name(username)
+        user_from_db = UserFromDb()
 
-        msg_not_found = (
-            "User admin not found" if not_found_msg == "admin" else "User not found"
+        any_user_db = await user_from_db.find_user_db(
+            username=username, not_found_msg=not_found_msg
         )
-        if not any_user_db:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail=msg_not_found
-            )
 
-        if any_user_db.get("role") != role:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="User not authorized"
-            )
+        await user_from_db.check_user_role(any_user_db=any_user_db, role=role)
 
         user_credentials = TokenCredentials(
             username=any_user_db.get("username"), password=any_user_db.get("password")
