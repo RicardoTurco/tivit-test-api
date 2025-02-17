@@ -79,6 +79,9 @@ class TivitFakeService:
         Retrieve data from api external
 
         :param username: name of any user
+        :param not_found_msg: who's to destination msg when user not found
+        :param role: role of user
+        :param url_tivit: url to external tivit service
         :return: data returned
         """
         user_from_db = UserFromDb()
