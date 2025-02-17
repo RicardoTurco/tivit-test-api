@@ -72,6 +72,40 @@ class TivitFakeService:
             )
 
     @staticmethod
+    async def data_external_user_info(username: str, role: str, url_tivit: str) -> dict:
+        """
+        Retrieve data from api external
+
+        :param username: name of any user
+        :return: data returned
+        """
+        fake_user_db = FakeUserDb()
+
+        any_user_db = await fake_user_db.get_fake_user_by_name(username)
+        msg_not_found = (
+            "User admin not found" if username == "admin" else "User not found"
+        )
+        if not any_user_db:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail=msg_not_found
+            )
+
+        if any_user_db.get("role") != role:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="User not authorized"
+            )
+
+        user_credentials = TokenCredentials(
+            username=any_user_db.get("username"), password=any_user_db.get("password")
+        )
+        user_token = await TivitFakeService.get_token(user_credentials)
+        headers = {"Authorization": f"Bearer {user_token.get("access_token")}"}
+
+        response = requests.get(url_tivit, headers=headers, verify=False)
+
+        return response.json()
+
+    @staticmethod
     async def admin_data_external(username: str) -> dict:
         """
         Retrieve admin data from api external
@@ -121,38 +155,6 @@ class TivitFakeService:
             )
 
     @staticmethod
-    async def user_data_external(username: str) -> dict:
-        """
-        Retrieve user data from api external
-
-        :param username: name of user
-        :return: data of user
-        """
-        fake_user_db = FakeUserDb()
-
-        user_db = await fake_user_db.get_fake_user_by_name(username)
-        if not user_db:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
-            )
-
-        if not user_db.get("role") == "user":
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN, detail="User not authorized"
-            )
-
-        user_credentials = TokenCredentials(
-            username=user_db.get("username"), password=user_db.get("password")
-        )
-        user_token = await TivitFakeService.get_token(user_credentials)
-        headers = {"Authorization": f"Bearer {user_token.get("access_token")}"}
-
-        response = requests.get(URL_TIVIT_USER, headers=headers, verify=False)
-        user_data_external = response.json()
-
-        return user_data_external
-
-    @staticmethod
     async def get_data_user(username: str) -> dict:
         """
         Calls external api to retrieve user data.
@@ -161,7 +163,9 @@ class TivitFakeService:
         :return: data of user
         """
         try:
-            user_data_external = await TivitFakeService.user_data_external(username)
+            user_data_external = await TivitFakeService.data_external_user_info(
+                username=username, role="user", url_tivit=URL_TIVIT_USER
+            )
             return user_data_external
         except HTTPException as e:
             raise HTTPException(
