@@ -39,34 +39,29 @@ async def test_get_admin_data_success(client):
 
 
 @pytest.mark.asyncio
-async def test_admin_data_external_user_not_found():
+async def test_admin_data_external_user_not_found(mock_get_user):
     # When endpoint '/v1/admin?username=<admin>' is called,
     # internally call 'data_external_user_info' method passing 'username',
     # 'not_found_msg', role' and 'url_tivit' as a parameter.
     # Here the method is called with a user unknown (not found).
-    with patch(
-        "app.repositories.fake_user_repository.FakeUserDb.get_fake_user_by_name",
-        new_callable=AsyncMock,
-    ) as mock_get_user:
+    mock_get_user.return_value = None
 
-        mock_get_user.return_value = None
+    with pytest.raises(HTTPException) as exc_info:
+        await TivitFakeService.data_external_user_info(
+            username="unknown_user",
+            not_found_msg="admin",
+            role="role",
+            url_tivit="url_tivit",
+        )
 
-        with pytest.raises(HTTPException) as exc_info:
-            await TivitFakeService.data_external_user_info(
-                username="unknown_user",
-                not_found_msg="admin",
-                role="role",
-                url_tivit="url_tivit",
-            )
+    assert exc_info.value.status_code == status.HTTP_404_NOT_FOUND
+    assert exc_info.value.detail == "User admin not found"
 
-        assert exc_info.value.status_code == status.HTTP_404_NOT_FOUND
-        assert exc_info.value.detail == "User admin not found"
-
-        mock_get_user.assert_called_once_with("unknown_user")
+    mock_get_user.assert_called_once_with("unknown_user")
 
 
 @pytest.mark.asyncio
-async def test_admin_data_external_user_not_authorized():
+async def test_admin_data_external_user_not_authorized(mock_get_user):
     # When endpoint '/v1/admin?username=<admin>' is called, internally
     # call 'data_external_user_info' method passing 'username', 'role', 'not_found_msg',
     # and 'url_tivit' as a parameter. Here the method 'data_external_user_info'
@@ -77,22 +72,17 @@ async def test_admin_data_external_user_not_authorized():
         "role": "user",
     }
 
-    with patch(
-        "app.repositories.fake_user_repository.FakeUserDb.get_fake_user_by_name",
-        new_callable=AsyncMock,
-    ) as mock_get_user:
+    mock_get_user.return_value = mock_user_non_admin
 
-        mock_get_user.return_value = mock_user_non_admin
+    with pytest.raises(HTTPException) as exc_info:
+        await TivitFakeService.data_external_user_info(
+            username="non_admin_user",
+            role="another",
+            not_found_msg="admin",
+            url_tivit="url_tivit",
+        )
 
-        with pytest.raises(HTTPException) as exc_info:
-            await TivitFakeService.data_external_user_info(
-                username="non_admin_user",
-                role="another",
-                not_found_msg="admin",
-                url_tivit="url_tivit",
-            )
+    assert exc_info.value.status_code == status.HTTP_401_UNAUTHORIZED
+    assert exc_info.value.detail == "User not authorized"
 
-        assert exc_info.value.status_code == status.HTTP_401_UNAUTHORIZED
-        assert exc_info.value.detail == "User not authorized"
-
-        mock_get_user.assert_called_once_with("non_admin_user")
+    mock_get_user.assert_called_once_with("non_admin_user")
