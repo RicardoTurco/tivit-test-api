@@ -8,7 +8,7 @@ from app.constants.constants import (
     URL_TIVIT_USER,
 )
 from app.schemas.token import TokenCredentials
-from app.utils.utils import CheckUserDb
+from app.utils.utils import UserFromDb
 
 
 class TivitFakeService:
@@ -81,21 +81,13 @@ class TivitFakeService:
         :param username: name of any user
         :return: data returned
         """
-        check_user_db = CheckUserDb()
-        any_user_db = await check_user_db.check_user_db(username=username)
+        user_from_db = UserFromDb()
 
-        msg_not_found = (
-            "User admin not found" if not_found_msg == "admin" else "User not found"
+        any_user_db = await user_from_db.find_user_db(
+            username=username, not_found_msg=not_found_msg
         )
-        if not any_user_db:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail=msg_not_found
-            )
 
-        if any_user_db.get("role") != role:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="User not authorized"
-            )
+        await user_from_db.check_user_role(any_user_db=any_user_db, role=role)
 
         user_credentials = TokenCredentials(
             username=any_user_db.get("username"), password=any_user_db.get("password")
