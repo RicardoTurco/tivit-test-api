@@ -41,7 +41,8 @@ async def test_get_user_data_success(client):
 @pytest.mark.asyncio
 async def test_user_data_external_user_not_found():
     # When endpoint '/v1/user?username=<user>' is called,
-    # internally call 'user_data_external' method passing 'username' as a parameter.
+    # internally call 'data_external_user_info' method passing 'username',
+    # 'role' and 'url_tivit' as a parameter.
     # Here the method is called with a user unknown (not found).
     with patch(
         "app.repositories.fake_user_repository.FakeUserDb.get_fake_user_by_name",
@@ -49,8 +50,14 @@ async def test_user_data_external_user_not_found():
     ) as mock_get_user:
 
         mock_get_user.return_value = None
+
         with pytest.raises(HTTPException) as exc_info:
-            await TivitFakeService.user_data_external("unknown_user")
+            await TivitFakeService.data_external_user_info(
+                username="unknown_user",
+                not_found_msg="user",
+                role="role",
+                url_tivit="url_tivit",
+            )
 
         assert exc_info.value.status_code == status.HTTP_404_NOT_FOUND
         assert exc_info.value.detail == "User not found"
@@ -60,11 +67,12 @@ async def test_user_data_external_user_not_found():
 
 @pytest.mark.asyncio
 async def test_user_data_external_user_not_authorized():
-    # When endpoint '/v1/user?username=<user>' is called,
-    # internally call 'user_data_external' method passing 'username' as a parameter.
-    # Here the method is called with a user forbidden (not authorized).
+    # When endpoint '/v1/user?username=<user>' is called, internally
+    # call 'data_external_user_info' method passing 'username', 'role'
+    # and 'url_tivit' as a parameter. Here the method 'data_external_user_info'
+    # is called using a diferent 'role' (not authorized).
     mock_user_non_user = {
-        "username": "non_user_user",
+        "username": "user",
         "password": "password123",
         "role": "user",
     }
@@ -77,9 +85,14 @@ async def test_user_data_external_user_not_authorized():
         mock_get_user.return_value = mock_user_non_user
 
         with pytest.raises(HTTPException) as exc_info:
-            await TivitFakeService.admin_data_external("non_admin_user")
+            await TivitFakeService.data_external_user_info(
+                username="non_user_user",
+                role="another",
+                not_found_msg="user",
+                url_tivit="url_tivit",
+            )
 
-        assert exc_info.value.status_code == status.HTTP_403_FORBIDDEN
+        assert exc_info.value.status_code == status.HTTP_401_UNAUTHORIZED
         assert exc_info.value.detail == "User not authorized"
 
-        mock_get_user.assert_called_once_with("non_admin_user")
+        mock_get_user.assert_called_once_with("non_user_user")
