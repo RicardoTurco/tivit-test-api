@@ -48,9 +48,24 @@ class TivitFakeService:
         :param credentials: Credentials pass in request body
         :return: access_token of a user
         """
-        params = {"username": credentials.username, "password": credentials.password}
-
         try:
+            user_from_db = UserFromDb()
+
+            any_user_db = await user_from_db.find_user_db(
+                username=credentials.username, not_found_msg=credentials.username
+            )
+
+            if credentials.password != any_user_db.get("password"):
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Wrong password",
+                )
+
+            params = {
+                "username": any_user_db.get("username"),
+                "password": any_user_db.get("password"),
+            }
+
             response = requests.post(URL_TIVIT_TOKEN, params=params, verify=False)
             response.raise_for_status()
             token_data = response.json()

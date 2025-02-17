@@ -10,7 +10,10 @@ from app.schemas.token import TokenCredentials
 async def test_get_token_success(client):
     mock_token_credentials = {"username": "test_user", "password": "test_password"}
 
-    mock_token_data = {"access_token": "mock_access_token", "token_type": "bearer"}
+    mock_token_data = {
+        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+        "token_type": "bearer",
+    }
 
     with patch(
         "app.services.tivit_fake_service.TivitFakeService.get_token",
@@ -22,7 +25,7 @@ async def test_get_token_success(client):
 
         assert response.status_code == status.HTTP_200_OK
         assert response.json() == {
-            "access_token": "mock_access_token",
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
             "token_type": "bearer",
         }
 
