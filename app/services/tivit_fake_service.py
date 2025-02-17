@@ -166,5 +166,5 @@ class TivitFakeService:
         except HTTPException as e:
             raise HTTPException(
                 status_code=e.status_code,
-                detail=f"Error to obtain admin information: {e.detail}",
+                detail=f"Error to obtain user information: {e.detail}",
             )
