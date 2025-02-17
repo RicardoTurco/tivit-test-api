@@ -139,7 +139,10 @@ class TivitFakeService:
         """
         try:
             user_data_external = await TivitFakeService.data_external_user_info(
-                username=username, role="user", url_tivit=URL_TIVIT_USER
+                username=username,
+                not_found_msg="user",
+                role="user",
+                url_tivit=URL_TIVIT_USER,
             )
             return user_data_external
         except HTTPException as e:

@@ -50,9 +50,11 @@ async def test_user_data_external_user_not_found():
     ) as mock_get_user:
 
         mock_get_user.return_value = None
+
         with pytest.raises(HTTPException) as exc_info:
             await TivitFakeService.data_external_user_info(
                 username="unknown_user",
+                not_found_msg="user",
                 role="role",
                 url_tivit="url_tivit",
             )
@@ -86,6 +88,7 @@ async def test_user_data_external_user_not_authorized():
             await TivitFakeService.data_external_user_info(
                 username="non_user_user",
                 role="another",
+                not_found_msg="user",
                 url_tivit="url_tivit",
             )
 
