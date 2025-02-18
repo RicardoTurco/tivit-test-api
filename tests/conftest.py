@@ -17,3 +17,11 @@ def mock_get_user():
         "app.repositories.fake_user_repository.FakeUserDb.get_fake_user_by_name"
     ) as mock_get_user:
         yield mock_get_user
+
+
+@pytest.fixture(scope="function")
+def mock_get_token():
+    with mock.patch(
+        "app.services.tivit_fake_service.TivitFakeService.get_token"
+    ) as mock_get_token:
+        yield mock_get_token
