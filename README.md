@@ -1,6 +1,13 @@
 # Tivit Test Api
 This is a simple test for python developer role
 
+## ..: Important :..
+
+```
+When you run the GET TOKEN endpoint (/v1/get-token). You will need the password of users, 
+these passwords be in FAKE_USERS_DB located in file 'tivit-test-api.app.constants.constants.py' 
+```
+
 ## Running
 
 To run application locally:
