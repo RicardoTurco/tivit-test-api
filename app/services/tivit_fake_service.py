@@ -1,4 +1,5 @@
 import logging
+
 import requests
 from fastapi import HTTPException, status
 
@@ -9,7 +10,6 @@ from app.constants.constants import (
     URL_TIVIT_USER,
 )
 from app.schemas.token import TokenCredentials
-from app.schemas.user import UserFromDB
 from app.utils.utils import UserFromDb
 
 logger = logging.getLogger(__name__)
@@ -45,35 +45,47 @@ class TivitFakeService:
             )
 
     @staticmethod
-    async def get_token(credentials: TokenCredentials, user_db: UserFromDB):
+    async def get_token(credentials: TokenCredentials, user_db: dict, find_in_db: bool):
         """
         Retrieve access_token of a user.
 
         :param credentials: Credentials pass in request body
         :param user_db: information of user from db
+        :param find_in_db: find user in DB ?
         :return: access_token of a user
         """
         logger.info("*** function: get_token")
         try:
-            if credentials.password != user_db.get("password"):
-                logger.warning(f"*** Wrong password for user: {user_db.get("username")}")
+            if find_in_db:
+                user_from_db = UserFromDb()
+
+                any_user_db = await user_from_db.find_user_db(
+                    username=credentials.username, not_found_msg=credentials.username
+                )
+            else:
+                any_user_db = user_db
+
+            if credentials.password != any_user_db.get("password"):
+                logger.warning(
+                    f"*** Wrong password for user: {any_user_db.get("username")}"
+                )
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail="Wrong password",
                 )
 
             params = {
-                "username": user_db.get("username"),
-                "password": user_db.get("password"),
+                "username": any_user_db.get("username"),
+                "password": any_user_db.get("password"),
             }
 
-            logger.info("*** Call POST /v1/get-token")
+            logger.info(f"*** Call external application: POST {URL_TIVIT_TOKEN}")
             response = requests.post(URL_TIVIT_TOKEN, params=params, verify=False)
             response.raise_for_status()
             token_data = response.json()
 
             if "access_token" not in token_data:
-                logger.warning(f"*** Token not found. Params: {params}")
+                logger.warning(f"*** Token not found in response. Params: {params}")
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail="Token not found in response",
@@ -117,7 +129,9 @@ class TivitFakeService:
             username=any_user_db.get("username"), password=any_user_db.get("password")
         )
         user_token = await TivitFakeService.get_token(
-            credentials=user_credentials, user_db=any_user_db
+            credentials=user_credentials,
+            user_db=any_user_db,
+            find_in_db=False,
         )
         headers = {"Authorization": f"Bearer {user_token.get("access_token")}"}
 
