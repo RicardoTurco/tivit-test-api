@@ -1,5 +1,9 @@
 PROJECT_NAME := tivit-test-api
 
+PYTHONWARNINGS=ignore:Unverified HTTPS request
+export PYTHONWARNINGS
+
+
 setup:
 	poetry shell
 
