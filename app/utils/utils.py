@@ -1,5 +1,6 @@
-from fastapi import HTTPException, status
 import logging
+
+from fastapi import HTTPException, status
 
 from app.core.singleton_meta import SingletonMeta
 from app.repositories.fake_user_repository import FakeUserDb

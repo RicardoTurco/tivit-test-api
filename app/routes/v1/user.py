@@ -1,4 +1,5 @@
 import logging
+
 from fastapi import APIRouter, Response, status
 
 from app.decorators.decorators import check_external_service_health
