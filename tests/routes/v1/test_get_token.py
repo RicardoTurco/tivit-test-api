@@ -23,7 +23,14 @@ async def test_get_token_success(client, mock_get_token):
         "token_type": "bearer",
     }
 
-    mock_get_token.assert_called_once_with(TokenCredentials(**mock_token_credentials))
+    mock_get_token.assert_called_once()
+    called_args, called_kwargs = mock_get_token.call_args
+
+    assert called_kwargs == {
+        "credentials": TokenCredentials(**mock_token_credentials),
+        "user_db": {},
+        "find_in_db": True,
+    }
 
 
 @pytest.mark.asyncio
