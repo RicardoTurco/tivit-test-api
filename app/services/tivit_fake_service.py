@@ -24,7 +24,9 @@ class TivitFakeService:
 
         :return: True / False
         """
+        logger.info("*** function: health_check")
         try:
+            logger.info(f"*** Call external application: GET {URL_TIVIT_HEALTH}")
             response = requests.get(URL_TIVIT_HEALTH, verify=False)
             response.raise_for_status()
             health_check_data = response.json()
@@ -39,6 +41,9 @@ class TivitFakeService:
             return result
 
         except HTTPException as e:
+            logger.warning(
+                f"*** Error to verify health check of external application {e}"
+            )
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Error to verify health check of external application {e}",
