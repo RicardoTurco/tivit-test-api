@@ -1,4 +1,8 @@
+import logging
+
 from app.constants.constants import FAKE_USERS_DB
+
+logger = logging.getLogger(__name__)
 
 
 class FakeUserDb:
@@ -9,6 +13,7 @@ class FakeUserDb:
 
     @staticmethod
     async def get_fake_user_by_name(username: str) -> dict:
+        logger.info("*** function: get_fake_user_by_name")
         user_db = FAKE_USERS_DB.get(username, {})
         return user_db
 

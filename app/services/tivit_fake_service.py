@@ -1,3 +1,4 @@
+import logging
 import requests
 from fastapi import HTTPException, status
 
@@ -8,7 +9,10 @@ from app.constants.constants import (
     URL_TIVIT_USER,
 )
 from app.schemas.token import TokenCredentials
+from app.schemas.user import UserFromDB
 from app.utils.utils import UserFromDb
+
+logger = logging.getLogger(__name__)
 
 
 class TivitFakeService:
@@ -41,36 +45,35 @@ class TivitFakeService:
             )
 
     @staticmethod
-    async def get_token(credentials: TokenCredentials):
+    async def get_token(credentials: TokenCredentials, user_db: UserFromDB):
         """
         Retrieve access_token of a user.
 
         :param credentials: Credentials pass in request body
+        :param user_db: information of user from db
         :return: access_token of a user
         """
+        logger.info("*** function: get_token")
         try:
-            user_from_db = UserFromDb()
-
-            any_user_db = await user_from_db.find_user_db(
-                username=credentials.username, not_found_msg=credentials.username
-            )
-
-            if credentials.password != any_user_db.get("password"):
+            if credentials.password != user_db.get("password"):
+                logger.warning(f"*** Wrong password for user: {user_db.get("username")}")
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail="Wrong password",
                 )
 
             params = {
-                "username": any_user_db.get("username"),
-                "password": any_user_db.get("password"),
+                "username": user_db.get("username"),
+                "password": user_db.get("password"),
             }
 
+            logger.info("*** Call POST /v1/get-token")
             response = requests.post(URL_TIVIT_TOKEN, params=params, verify=False)
             response.raise_for_status()
             token_data = response.json()
 
             if "access_token" not in token_data:
+                logger.warning(f"*** Token not found. Params: {params}")
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail="Token not found in response",
@@ -82,6 +85,7 @@ class TivitFakeService:
             }
 
         except HTTPException as e:
+            logger.warning(f"*** Error to obtain token: {e.detail}")
             raise HTTPException(
                 status_code=e.status_code, detail=f"Error to obtain token: {e.detail}"
             )
@@ -99,6 +103,8 @@ class TivitFakeService:
         :param url_tivit: url to external tivit service
         :return: data returned
         """
+        logger.info("*** function: data_external_user_info")
+
         user_from_db = UserFromDb()
 
         any_user_db = await user_from_db.find_user_db(
@@ -110,9 +116,12 @@ class TivitFakeService:
         user_credentials = TokenCredentials(
             username=any_user_db.get("username"), password=any_user_db.get("password")
         )
-        user_token = await TivitFakeService.get_token(user_credentials)
+        user_token = await TivitFakeService.get_token(
+            credentials=user_credentials, user_db=any_user_db
+        )
         headers = {"Authorization": f"Bearer {user_token.get("access_token")}"}
 
+        logger.info(f"*** Call external application: GET {url_tivit}")
         response = requests.get(url_tivit, headers=headers, verify=False)
 
         return response.json()
@@ -147,6 +156,7 @@ class TivitFakeService:
         :param username: name of user
         :return: data of user
         """
+        logger.info("*** function: get_data_user")
         try:
             user_data_external = await TivitFakeService.data_external_user_info(
                 username=username,
@@ -156,6 +166,7 @@ class TivitFakeService:
             )
             return user_data_external
         except HTTPException as e:
+            logger.warning(f"Error to obtain user information: {e.detail}")
             raise HTTPException(
                 status_code=e.status_code,
                 detail=f"Error to obtain user information: {e.detail}",
