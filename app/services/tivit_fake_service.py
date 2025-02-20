@@ -148,6 +148,7 @@ class TivitFakeService:
         :param username: name of admin
         :return: data of admin
         """
+        logger.info("*** function: get_data_admin")
         try:
             admin_data_external = await TivitFakeService.data_external_user_info(
                 username=username,
@@ -157,6 +158,7 @@ class TivitFakeService:
             )
             return admin_data_external
         except HTTPException as e:
+            logger.warning(f"Error to obtain admin information: {e.detail}")
             raise HTTPException(
                 status_code=e.status_code,
                 detail=f"Error to obtain admin information: {e.detail}",
