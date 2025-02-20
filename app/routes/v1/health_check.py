@@ -22,7 +22,7 @@ async def external_health_check(response: Response):
     This endpoint returns a health check of external application.
     """
     logger.info("*** starting GET external-health-check endpoint")
-    health_check_external = await TivitFakeService.health_check()
+    health_check_external = await TivitFakeService.external_health_check()
     result = True if health_check_external else False
     response.status_code = status.HTTP_200_OK
     logger.info("*** finishing GET external-health-check endpoint")

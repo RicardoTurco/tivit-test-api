@@ -18,13 +18,13 @@ logger = logging.getLogger(__name__)
 class TivitFakeService:
 
     @staticmethod
-    async def health_check() -> bool:
+    async def external_health_check() -> bool:
         """
         Verify a health check of external application.
 
         :return: True / False
         """
-        logger.info("*** function: health_check")
+        logger.info("*** function: external_health_check")
         try:
             logger.info(f"*** Call external application: GET {URL_TIVIT_HEALTH}")
             response = requests.get(URL_TIVIT_HEALTH, verify=False)

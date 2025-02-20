@@ -10,7 +10,7 @@ async def test_external_health_check_success(client):
     mock_external_app_result = {"external_application": True}
 
     with patch(
-        "app.services.tivit_fake_service.TivitFakeService.health_check",
+        "app.services.tivit_fake_service.TivitFakeService.external_health_check",
         new_callable=AsyncMock,
     ) as mock_external_health_check:
 
