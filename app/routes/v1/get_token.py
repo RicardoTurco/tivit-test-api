@@ -28,7 +28,7 @@ async def get_token(token_credentials: TokenCredentials, response: Response):
     :param response: status code of request
     :return: token and type of token
     """
-    logger.info("*** starting GET token endpoint")
+    logger.info("*** starting POST token endpoint")
     tivit_fake_service = TivitFakeService()
     token_data = await tivit_fake_service.get_token(
         credentials=token_credentials,
@@ -36,7 +36,7 @@ async def get_token(token_credentials: TokenCredentials, response: Response):
         find_in_db=True,
     )
     response.status_code = status.HTTP_200_OK
-    logger.info("*** finishing GET token endpoint")
+    logger.info("*** finishing POST token endpoint")
     return {
         "access_token": token_data.get("access_token"),
         "token_type": token_data.get("token_type"),
