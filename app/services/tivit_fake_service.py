@@ -16,6 +16,9 @@ logger = logging.getLogger(__name__)
 
 
 class TivitFakeService:
+    """
+    Class Tivit fake service
+    """
 
     @staticmethod
     async def external_health_check() -> bool:
@@ -26,28 +29,26 @@ class TivitFakeService:
         """
         logger.info("*** function: external_health_check")
         try:
-            logger.info(f"*** Call external application: GET {URL_TIVIT_HEALTH}")
-            response = requests.get(URL_TIVIT_HEALTH, verify=False)
+            logger.info("*** Call external application: GET %s", URL_TIVIT_HEALTH)
+            response = requests.get(URL_TIVIT_HEALTH, verify=False, timeout=30)
             response.raise_for_status()
             health_check_data = response.json()
 
-            result = (
-                True
-                if response.status_code == status.HTTP_200_OK
+            result = bool(
+                response.status_code == status.HTTP_200_OK
                 and health_check_data.get("status") == "ok"
-                else False
             )
 
             return result
 
         except HTTPException as e:
             logger.warning(
-                f"*** Error to verify health check of external application {e}"
+                "*** Error to verify health check of external application %s", e
             )
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Error to verify health check of external application {e}",
-            )
+            ) from e
 
     @staticmethod
     async def get_token(credentials: TokenCredentials, user_db: dict, find_in_db: bool):
@@ -72,7 +73,7 @@ class TivitFakeService:
 
             if credentials.password != any_user_db.get("password"):
                 logger.warning(
-                    f"*** Wrong password for user: {any_user_db.get("username")}"
+                    "*** Wrong password for user: %s", any_user_db.get("username")
                 )
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
@@ -84,13 +85,15 @@ class TivitFakeService:
                 "password": any_user_db.get("password"),
             }
 
-            logger.info(f"*** Call external application: POST {URL_TIVIT_TOKEN}")
-            response = requests.post(URL_TIVIT_TOKEN, params=params, verify=False)
+            logger.info("*** Call external application: POST %s", URL_TIVIT_TOKEN)
+            response = requests.post(
+                URL_TIVIT_TOKEN, params=params, verify=False, timeout=30
+            )
             response.raise_for_status()
             token_data = response.json()
 
             if "access_token" not in token_data:
-                logger.warning(f"*** Token not found in response. Params: {params}")
+                logger.warning("*** Token not found in response. Params: %s", params)
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail="Token not found in response",
@@ -102,10 +105,10 @@ class TivitFakeService:
             }
 
         except HTTPException as e:
-            logger.warning(f"*** Error to obtain token: {e.detail}")
+            logger.warning("*** Error to obtain token: %s", e.detail)
             raise HTTPException(
                 status_code=e.status_code, detail=f"Error to obtain token: {e.detail}"
-            )
+            ) from e
 
     @staticmethod
     async def data_external_user_info(
@@ -140,8 +143,8 @@ class TivitFakeService:
         )
         headers = {"Authorization": f"Bearer {user_token.get("access_token")}"}
 
-        logger.info(f"*** Call external application: GET {url_tivit}")
-        response = requests.get(url_tivit, headers=headers, verify=False)
+        logger.info("*** Call external application: GET %s", url_tivit)
+        response = requests.get(url_tivit, headers=headers, verify=False, timeout=30)
 
         return response.json()
 
@@ -163,11 +166,11 @@ class TivitFakeService:
             )
             return admin_data_external
         except HTTPException as e:
-            logger.warning(f"Error to obtain admin information: {e.detail}")
+            logger.warning("*** Error to obtain admin information: %s", e.detail)
             raise HTTPException(
                 status_code=e.status_code,
                 detail=f"Error to obtain admin information: {e.detail}",
-            )
+            ) from e
 
     @staticmethod
     async def get_data_user(username: str) -> dict:
@@ -187,8 +190,8 @@ class TivitFakeService:
             )
             return user_data_external
         except HTTPException as e:
-            logger.warning(f"Error to obtain user information: {e.detail}")
+            logger.warning("*** Error to obtain user information: %s", e.detail)
             raise HTTPException(
                 status_code=e.status_code,
                 detail=f"Error to obtain user information: {e.detail}",
-            )
+            ) from e

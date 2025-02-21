@@ -9,6 +9,10 @@ logger = logging.getLogger(__name__)
 
 
 def check_external_service_health():
+    """
+    Check health of external service.
+    """
+
     def decorator(func):
 
         @wraps(func)

@@ -10,12 +10,12 @@ logger = logging.getLogger(__name__)
 
 token_router = APIRouter()
 
-tag = "Token"
+TAG = "Token"
 
 
 @token_router.post(
     "/get-token",
-    tags=[tag],
+    tags=[TAG],
     summary="Retrieve token to use for endpoints.",
     description="This endpoint retrieve token to use for endpoints.",
 )
