@@ -8,6 +8,9 @@ from app.services.tivit_fake_service import TivitFakeService
 
 @pytest.mark.asyncio
 async def test_get_admin_data_success(client):
+    """
+    Test: test_get_admin_data_success.
+    """
     mock_username = "admin_user"
 
     mock_admin_data = {
@@ -40,6 +43,9 @@ async def test_get_admin_data_success(client):
 
 @pytest.mark.asyncio
 async def test_admin_data_external_user_not_found(mock_get_user):
+    """
+    Test: test_admin_data_external_user_not_found.
+    """
     # When endpoint '/v1/admin?username=<admin>' is called,
     # internally call 'data_external_user_info' method passing 'username',
     # 'not_found_msg', role' and 'url_tivit' as a parameter.
@@ -62,6 +68,9 @@ async def test_admin_data_external_user_not_found(mock_get_user):
 
 @pytest.mark.asyncio
 async def test_admin_data_external_user_not_authorized(mock_get_user):
+    """
+    Test: test_admin_data_external_user_not_authorized.
+    """
     # When endpoint '/v1/admin?username=<admin>' is called, internally
     # call 'data_external_user_info' method passing 'username', 'role', 'not_found_msg',
     # and 'url_tivit' as a parameter. Here the method 'data_external_user_info'

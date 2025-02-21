@@ -8,12 +8,12 @@ logger = logging.getLogger(__name__)
 
 health_router = APIRouter()
 
-tag = "Health Check"
+TAG = "Health Check"
 
 
 @health_router.get(
     "/external-health-check",
-    tags=[tag],
+    tags=[TAG],
     summary="Check status of external application",
     description="This endpoint returns a health check of external application.",
 )
@@ -23,7 +23,7 @@ async def external_health_check(response: Response):
     """
     logger.info("*** starting GET external-health-check endpoint")
     health_check_external = await TivitFakeService.external_health_check()
-    result = True if health_check_external else False
+    result = bool(health_check_external)
     response.status_code = status.HTTP_200_OK
     logger.info("*** finishing GET external-health-check endpoint")
     return {"external_application": result}
@@ -31,7 +31,7 @@ async def external_health_check(response: Response):
 
 @health_router.get(
     "/health-check",
-    tags=[tag],
+    tags=[TAG],
     summary="Check status of application",
     description="This endpoint returns a health check of application.",
 )

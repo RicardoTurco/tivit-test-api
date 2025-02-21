@@ -13,6 +13,9 @@ install:
 run:
 	poetry run python main.py
 
+pylint:
+	poetry run pylint .
+
 test:
 	poetry run pytest -vv -s
 

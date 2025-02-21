@@ -8,6 +8,9 @@ from app.schemas.token import TokenCredentials
 
 @pytest.mark.asyncio
 async def test_get_token_success(client, mock_get_token):
+    """
+    Test: test_get_token_success.
+    """
     mock_token_credentials = {"username": "test_user", "password": "test_password"}
 
     mock_token_data = {
@@ -25,7 +28,7 @@ async def test_get_token_success(client, mock_get_token):
     }
 
     mock_get_token.assert_called_once()
-    called_args, called_kwargs = mock_get_token.call_args
+    _, called_kwargs = mock_get_token.call_args
 
     assert called_kwargs == {
         "credentials": TokenCredentials(**mock_token_credentials),
@@ -36,6 +39,9 @@ async def test_get_token_success(client, mock_get_token):
 
 @pytest.mark.asyncio
 async def test_get_token_user_not_found(client):
+    """
+    Test: test_get_token_user_not_found.
+    """
     response = client.post(
         "/v1/get-token",
         json={"username": "nonexistent_user", "password": "wrong_password"},
@@ -50,6 +56,9 @@ async def test_get_token_user_not_found(client):
 
 @pytest.mark.asyncio
 async def test_get_token_wrong_password(client, mock_get_user):
+    """
+    Test: test_get_token_wrong_password.
+    """
     mock_get_user.return_value = {
         "username": "existing_user",
         "password": "correct_password",
@@ -69,6 +78,9 @@ async def test_get_token_wrong_password(client, mock_get_user):
 async def test_get_token_missing_access_token(
     mock_requests_post, client, mock_get_user
 ):
+    """
+    Test: test_get_token_missing_access_token.
+    """
     mock_token_credentials = {"username": "test_user", "password": "test_password"}
 
     mock_user = {"username": "test_user", "password": "test_password", "role": "user"}

@@ -9,12 +9,12 @@ logger = logging.getLogger(__name__)
 
 user_router = APIRouter()
 
-tag = "User"
+TAG = "User"
 
 
 @user_router.get(
     "/user",
-    tags=[tag],
+    tags=[TAG],
     summary="Retrieve user data",
     description="This endpoint retrieve user data.",
 )

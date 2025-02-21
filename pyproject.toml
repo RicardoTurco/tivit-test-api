@@ -23,6 +23,7 @@ ipython = "^8.32.0"
 pytest-cov = "^6.0.0"
 black = "^25.1.0"
 isort = "^6.0.0"
+pylint = "^3.3.4"
 
 [build-system]
 requires = ["poetry-core"]

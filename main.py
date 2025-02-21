@@ -5,6 +5,9 @@ from urls import router_v1
 
 
 def get_app() -> FastAPI:
+    """
+    Returns an instance of app
+    """
     app = FastAPI(
         title="Tivit Test API",
         description="This is a simple test for python developer role",

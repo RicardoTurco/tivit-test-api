@@ -165,6 +165,36 @@ Project structure (considering folder start in `tivit-test-api`):
 
 This project has a some LINTERs to mantain the quality of code.
 
+### Pylint
+
+[Pylint](https://www.pylint.org/) check if the code contains errors of syntax and logical.
+
+```
+make pylint
+```
+
+### Black
+
+Formats the code according to [PEP-8](https://peps.python.org/pep-0008/) standards.
+
+```
+black --check . (displays which files need adjustments in code formatting);
+black --check --diff <path_to_file> (displays the necessary code formmating changes in a SPECIFIC file - manual adjust);
+black . (performs code formatting "automatically" in ALL files);
+black <path_to_file> (performs code formatting "automatically" in a SPECIFIC file);
+```
+
+### Isort
+
+Performs adjustments in "imports" of project - [ISORT](https://pycqa.github.io/isort/).
+
+```
+isort --check . (displays wich files need adjustments in imports);
+isort --check --diff <path_to_file> (displays the necessary adjustments in imports in a SPECIFIC file - manual adjust);
+isort . (performs adjustments in imports "automatically" in ALL files);
+isort <path_to_file> (performs adjustments in imports "automatically" in a SPECIFIC file);
+```
+
 ### Coverage
 
 To check the COVERAGE of tests of project, is possible execute the follow command:
@@ -185,26 +215,4 @@ To delete the folder and file created, just run command:
 
 ```
 make clean
-```
-
-## Black
-
-Formats the code according to [PEP-8](https://peps.python.org/pep-0008/) standards.
-
-```
-black --check . (displays which files need adjustments in code formatting);
-black --check --diff <path_to_file> (displays the necessary code formmating changes in a SPECIFIC file - manual adjust);
-black . (performs code formatting "automatically" in ALL files);
-black <path_to_file> (performs code formatting "automatically" in a SPECIFIC file);
-```
-
-## Isort
-
-Performs adjustments in "imports" of project - [ISORT](https://pycqa.github.io/isort/).
-
-```
-isort --check . (displays wich files need adjustments in imports);
-isort --check --diff <path_to_file> (displays the necessary adjustments in imports in a SPECIFIC file - manual adjust);
-isort . (performs adjustments in imports "automatically" in ALL files);
-isort <path_to_file> (performs adjustments in imports "automatically" in a SPECIFIC file);
 ```

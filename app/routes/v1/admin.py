@@ -9,12 +9,12 @@ logger = logging.getLogger(__name__)
 
 admin_router = APIRouter()
 
-tag = "Admin"
+TAG = "Admin"
 
 
 @admin_router.get(
     "/admin",
-    tags=[tag],
+    tags=[TAG],
     summary="Retrieve admin data",
     description="This endpoint retrieve admin data",
 )
