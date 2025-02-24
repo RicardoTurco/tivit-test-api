@@ -50,7 +50,11 @@ class UserFromDb(metaclass=SingletonMeta):
         logger.info("*** function: check_user_role")
 
         if any_user_db.get("role") != role:
-            logger.warning(" *** Role %s is insufficient", role)
+            logger.critical(
+                " *** The role: %s of user: %s, is insufficient.",
+                any_user_db.get("role"),
+                any_user_db.get("username"),
+            )
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, detail="User not authorized"
             )
