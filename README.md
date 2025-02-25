@@ -99,6 +99,9 @@ Project structure (considering folder start in `tivit-test-api`):
 │   │   ├── constants
 │   │   │    ├── __init__.py 
 │   │   │    ├── constants.py
+│   │   ├── core
+│   │   │    ├── __init__.py 
+│   │   │    ├── singleton_meta.py
 │   │   ├── decorators
 │   │   │    ├── __init__.py 
 │   │   │    ├── decorators.py
@@ -130,8 +133,10 @@ Project structure (considering folder start in `tivit-test-api`):
 │   │   │    │   ├── test_get_token.py
 │   │   │    │   ├── test_user.py
 ├── .gitignore
+├── .pylintrc
 ├── docker-compose.yaml
 ├── Dockerfile
+├── log_conf.yaml
 ├── main.py
 ├── Makefile
 ├── poetry.lock
@@ -145,15 +150,23 @@ Project structure (considering folder start in `tivit-test-api`):
 
 * `tivit-test-api` - "Main" folder of project.
 * `app` - All the RESTfull API implementation is here.
+* `app/constants` - "constants" used in project.
+* `app/core` - Important somethings used in project.
+* `app/decorators` - "Decorators" module of project.
+* `app/repositories` - "Repositories" module of project.
 * `app/routes/v1` - "Routes" module of project (v1 endpoints).
-* `app/services` - "Services" module of project (Services).
+* `app/schemas` - "Schemas" module of project.
+* `app/services` - "Services" module of project.
+* `app/utils` - General classes, functions and procedures used in project.
 * `tests` - All tests of application.
 
 ### Files
 
 * `.gitignore` - Lists files and directories which should not be added to git repository.
+* `.pylintrc` - Define configurations of pylint.
 * `docker-compose.yaml` - To UP application locally.
 * `Dockerfile` - Build an image from project.
+* `log_conf.yaml` - Configurations about log messages.
 * `main.py` - The Application entrypoint.
 * `Makefile` - Make commands available.
 * `poetry.lock` - Define specific versions of dependencies.
