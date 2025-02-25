@@ -87,6 +87,190 @@ h) To stop / down application:
 CTRL + C
 ```
 
+## Endpoints
+
+The project has the following endpoints:
+
+### - Health Check: External application
+
+```
+GET /v1/external-health-check
+
+Returns the health check of 'external application'.
+```
+
+#### Success (200 - OK):
+
+```
+{
+  "external_application": true   # or False
+}
+```
+
+### - Health Check: application
+
+```
+GET /v1/health-check
+
+Returns the health check of 'application'.
+```
+
+#### Success (200 - OK):
+
+```
+{
+  "application": true   # or False
+}
+```
+
+### - Token:
+
+```
+POST /v1/get-token
+
+Retrieve token to use for endpoints.
+```
+
+#### payload / body:
+
+```
+{
+  "username": <user_to_retrieve_token>,
+  "password": <password_of_user>
+}
+```
+
+#### Success (200 - OK):
+
+```
+{
+  "access_token": <access_token>,
+  "token_type": "bearer"
+}
+```
+
+#### User not found (404 - Not found):
+
+```
+{
+  "detail": "Error to obtain token: User not found"
+}
+```
+
+#### Wrong password (400 - Bad request):
+
+```
+{
+  "detail": "Error to obtain token: Wrong password for user: <user>"
+}
+```
+
+#### Token not found (400 - Bad request):
+
+```
+{
+  "detail": "Error to obtain token: Token not found in response"
+}
+```
+
+### - Admin:
+
+```
+GET /v1/admin?username=admin
+
+Retrieve admin data.
+```
+
+#### query string:
+
+```
+username=<user> 
+```
+
+#### Success (200 - OK):
+
+```
+{
+  "admin_data": {
+    "message": "Hello, admin!",
+    "data": {
+      "name": "Admin Master",
+      "email": "admin@example.com",
+      "reports": [
+        {
+          "id": 1,
+          "title": "Monthly Sales",
+          "status": "Completed"
+        },
+        {
+          "id": 2,
+          "title": "User Activity",
+          "status": "Pending"
+        }
+      ]
+    }
+  }
+}
+```
+
+#### User not found (404 - Not found):
+
+```
+{
+  "detail": "Error to obtain admin information: User admin not found"
+}
+```
+
+### - User:
+
+```
+GET /v1/user?username=user
+
+Retrieve user data.
+```
+
+#### query string:
+
+```
+username=<user> 
+```
+
+#### Success (200 - OK):
+
+```	
+Response body
+Download
+{
+  "user_data": {
+    "message": "Hello, user!",
+    "data": {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "purchases": [
+        {
+          "id": 1,
+          "item": "Laptop",
+          "price": 2500
+        },
+        {
+          "id": 2,
+          "item": "Smartphone",
+          "price": 1200
+        }
+      ]
+    }
+  }
+}
+```
+
+#### User not found (404 - Not found):
+
+```
+{
+  "detail": "Error to obtain admin information: User not found"
+}
+```
+
 ## Project Structure
 
 Project structure (considering folder start in `tivit-test-api`):
